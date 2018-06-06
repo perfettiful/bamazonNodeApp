@@ -31,23 +31,27 @@ function queryAll(){
         //var results = "Item Id : " + res.item_id + "|"
         console.table(res);
         inquireCustomer();
+        checkInventory()
     } );
 
   };//End queryAll();
 
 //Start inquireCustomer();
 function inquireCustomer(){
-
-    inquirer.prompt({
-
+    inquirer.prompt([{
         //Question 1:
         name: 'userProdId',
         type: 'input',
         message: 'What is the Id of the product you want to buy?'
-    }).then(
+    },{
+        //Question 2:
+        name: 'userQty',
+        type: 'input',
+        message: 'How many of this product would you like to buy?'
+    }]).then(
         function(userInput){
-
-            console.log(userInput.userProdId);
+            console.log("Item Selected: " + userInput.userProdId);
+            console.log("Qty requested: " + userInput.userQty);
         }
     )
 };//End inquireCustomer();
