@@ -28,10 +28,10 @@ const connection = mysql.createConnection({
 function queryAll(){
     
     connection.query('SELECT * FROM products', function (err, res) {
-        //var results = "Item Id : " + res.item_id + "|"
+        //Table creation w/out console.table from cTable Package: var results = "Item Id : " + res.item_id + "|" + . . . .
         console.table(res);
+        //console.log(res);
         inquireCustomer();
-        checkInventory()
     } );
 
   };//End queryAll();
@@ -52,6 +52,24 @@ function inquireCustomer(){
         function(userInput){
             console.log("Item Selected: " + userInput.userProdId);
             console.log("Qty requested: " + userInput.userQty);
+
+            checkInventory(userInput);
         }
     )
 };//End inquireCustomer();
+
+//Start checkInventory()
+function checkInventory(orderJSON){
+    var productId = orderJSON.userProdId;
+    var qtyOrdered = orderJSON.userQty;
+
+    connection.query("SELECT * FROM products WHERE ?",{
+
+        item_id: productId
+    }, function(err, res){
+        console.table(res);
+    });
+
+
+
+};//End checkInventory()
