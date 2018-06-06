@@ -1,6 +1,6 @@
-# Project Title
+# Bamazon
 
-Bamazon: E-Commerce Node application to track sales with MySQL DB
+E-Commerce Node application to track sales with MySQL DB
 
 ## Getting Started
 
