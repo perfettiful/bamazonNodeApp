@@ -19,7 +19,7 @@ const connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     //console.log("Connected to bamazon DB on port 8889!!\n");
-    console.log('|||||| ------------------ Welcome to Bamazon! ------------------||||||| \n');
+    console.log('\n|||||| ------------------ Welcome to Bamazon! ------------------||||||| \n');
     console.log('|||||| ------------------ Check Out All our Great Products ------------------||||||| \n');
     queryAll();
 });
@@ -50,9 +50,11 @@ function inquireCustomer() {
         message: 'How many of this product would you like to buy?'
     }]).then(
         function (userInput) {
+            console.log("||-----------------------------------------------------------||");
             console.log("\n||------- Order Summary:");
             console.log("\n||||------- Item Id Selected: " + userInput.userProdId);
-            console.log("\n||||------- Qty requested: " + userInput.userQty);
+            console.log("\n||||------- Qty requested: " + userInput.userQty + "\n");
+            console.log("||-----------------------------------------------------------||");
 
             checkInventory(userInput);
         }
@@ -78,20 +80,20 @@ function checkInventory(orderJSON) {
 
             //Check if order can be fulfilled 
             if (diffAvailOrd >= 0) {
-                console.log("\n||------- We have " + availQty + " of these " + productOrdered + "s" + ", and you ordered " + qtyOrdered + ".");
+                console.log("\n||------- We have " + availQty + " of these " + productOrdered + "s" + ", and you ordered " + qtyOrdered + ".\n");
 
                 //Execute database update given customer's order can be fulfilled
                 decrementInventory(diffAvailOrd, productId);
 
                 //Print Receipt After SQL UPDATE
-                console.log("\n||------- Thanks for Shopping with Bamazon");
+                console.log("\n||------- Congratulations! Your order has been submitted!");
                 console.log("\n||------- Customer Receipt:");
                 console.table(productRow);
 
             } else {
-                console.log("Insufficient quantity!");
-                console.log("Our apologies, we do not have enough available quantity of these " + productOrdered + "s" + " to fulfill your order.");
-                console.log("Please place a different order.");
+                console.log("\n!!-------- Warning: Insufficient available quantity! --------!! \n");
+                console.log("||-------- Our apologies, we do not have enough available quantity of these " + productOrdered + "s" + " to fulfill your order.\n");
+                console.log("||-------- Please place a different order:\n");
                 queryAll();
             }
         }); //End SELECT connection.query()
@@ -108,7 +110,8 @@ function decrementInventory(newInvAmt, productId) {
         function (err, res) {
             //console.log(res);
             //console.log(res.affectedRows + " products updated!\n");
-            console.log("\n||------- Congratulations! Your order has been submitted!");
+            console.log("\n||------- Thanks for Shopping with Bamazon -------||\n");
+            console.log("\n||------- Please feel free to explore our store front again and place another order -------||\n");
             queryAll();
         } //End connection.query() callback fct
     ); //End UPDATE connection.query()
