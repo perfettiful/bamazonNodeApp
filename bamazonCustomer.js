@@ -56,7 +56,18 @@ function inquireCustomer() {
             console.log("\n||||------- Qty requested: " + userInput.userQty + "\n");
             console.log("||-----------------------------------------------------------||");
 
-            checkInventory(userInput);
+            //Data Validation to sanitize User Inout
+
+            if(Number.isInteger(parseInt(userInput.userProdId)) && Number.isInteger(parseInt(userInput.userQty))){
+                 checkInventory(userInput);
+             } else {
+                console.log("\n!!-------- Warning: Order Imformation Not Processed! --------!! \n");
+                 console.log("\n!!-------- Please, Make sure to enter whole numbers exactly matching our product Id! --------!! \n");
+
+                 queryAll();
+            }
+
+    
         }
     ); //End .prompt() callback fct
 }; //End inquireCustomer();
@@ -80,7 +91,7 @@ function checkInventory(orderJSON) {
 
             //Check if order can be fulfilled 
             if (diffAvailOrd >= 0) {
-                console.log("\n||------- We have " + availQty + " of these " + productOrdered + "s" + ", and you ordered " + qtyOrdered + ".\n");
+                console.log("\n>>------- We have " + availQty + " of these " + productOrdered + "s" + ", and you ordered " + qtyOrdered + ".\n");
 
                 //Execute database update given customer's order can be fulfilled
                 decrementInventory(diffAvailOrd, productId);
@@ -88,12 +99,18 @@ function checkInventory(orderJSON) {
                 //Print Receipt After SQL UPDATE
                 console.log("\n||------- Congratulations! Your order has been submitted!");
                 console.log("\n||------- Customer Receipt:");
-                console.table(productRow);
+                console.log("\n||------- Product Id: " + productId);
+                console.log("\n||------- Product Name: " + productRow.product_name);
+                console.log("\n||------- Quantity Order: " + qtyOrdered);
+                console.log("\n||------- Unit Cost: $" + productRow.price);
+                var orderTotal = qtyOrdered * productRow.price
+                console.log("\n||-------------- Order Total Due: $" + orderTotal.toFixed(2));
+                //console.table(productRow);
 
             } else {
                 console.log("\n!!-------- Warning: Insufficient available quantity! --------!! \n");
                 console.log("||-------- Our apologies, we do not have enough available quantity of these " + productOrdered + "s" + " to fulfill your order.\n");
-                console.log("||-------- Please place a different order:\n");
+                console.log("||-------- Please place a different order\n");
                 queryAll();
             }
         }); //End SELECT connection.query()
